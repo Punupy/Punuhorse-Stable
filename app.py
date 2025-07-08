@@ -20,7 +20,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+    comments = db.relationship('Comment', backref='author', lazy=True)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +30,14 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comments = db.relationship('Comment', backref='post', lazy=True)
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -41,14 +51,30 @@ def home():
         page=page, per_page=5, error_out=False)
     return render_template('home.html', posts=posts)
 
-@app.route('/post/<int:id>')
+@app.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
     post = Post.query.get_or_404(id)
-    return render_template('post.html', post=post)
+    
+    if request.method == 'POST' and current_user.is_authenticated:
+        content = request.form.get('content')
+        if content:
+            comment = Comment(content=content, user_id=current_user.id, post_id=post.id)
+            db.session.add(comment)
+            db.session.commit()
+            flash('Your comment has been added!', 'success')
+            return redirect(url_for('post', id=id))
+    
+    comments = Comment.query.filter_by(post_id=id).order_by(Comment.date_posted.asc()).all()
+    return render_template('post.html', post=post, comments=comments)
 
 @app.route('/write', methods=['GET', 'POST'])
 @login_required
 def write():
+    # Only admin can write posts
+    if not current_user.is_admin:
+        flash('Only the stable owner can write tales!', 'error')
+        return redirect(url_for('home'))
+        
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
@@ -88,11 +114,18 @@ def register():
         if User.query.filter_by(username=username).first():
             flash('Username already exists', 'error')
         else:
+            # First user becomes admin (stable owner)
+            is_first_user = User.query.count() == 0
             user = User(username=username, 
-                       password_hash=generate_password_hash(password))
+                       password_hash=generate_password_hash(password),
+                       is_admin=is_first_user)
             db.session.add(user)
             db.session.commit()
             login_user(user)
+            if is_first_user:
+                flash('Welcome to your stable! You are now the stable owner.', 'success')
+            else:
+                flash('Welcome to the stable! You can read tales and leave comments.', 'success')
             return redirect(url_for('home'))
     
     return render_template('register.html')
