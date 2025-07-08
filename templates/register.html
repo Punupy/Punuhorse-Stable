@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Join Stable - Punuhorse's Stable{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header bg-success text-white text-center">
+                <h4><i class="fas fa-user-plus me-2"></i>Join the Stable</h4>
+                <small>Become part of our storytelling community</small>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user me-1"></i>Choose Your Stable Name
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Your unique storyteller name" required>
+                        <div class="form-text">This will be visible on all your tales</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-1"></i>Create Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Keep your stories secure" required>
+                        <div class="form-text">Choose something memorable but secure</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100 mb-3">
+                        <i class="fas fa-horse-head me-2"></i>Join the Stable
+                    </button>
+                </form>
+                
+                <hr>
+                <div class="text-center">
+                    <p class="mb-2">Already have a stable?</p>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Enter Stable
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6><i class="fas fa-handshake text-primary me-2"></i>Stable Rules</h6>
+                <ul class="small list-unstyled mb-0">
+                    <li><i class="fas fa-check text-success me-2"></i>Be kind and respectful to all stable members</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Share stories that inspire, entertain, or educate</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Respect others' tales and experiences</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Keep the stable a safe space for creativity</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-2x text-success mb-3"></i>
+                <h6>Join Our Community</h6>
+                <p class="small text-muted mb-0">
+                    Connect with fellow storytellers and share in the magic of words.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

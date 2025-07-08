@@ -1,0 +1,208 @@
+/* Punuhorse's Stable - Custom Styles */
+
+:root {
+    --stable-brown: #8B4513;
+    --stable-gold: #DAA520;
+    --stable-green: #228B22;
+    --stable-cream: #F5F5DC;
+    --stable-dark: #4A4A4A;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--stable-brown) 0%, #654321 100%);
+    padding: 60px 0;
+    margin-bottom: 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.post-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.post-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+}
+
+.btn {
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, var(--stable-green), #196619);
+    border: none;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    transform: translateY(-1px);
+}
+
+.post-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: var(--stable-dark);
+}
+
+.post-meta .badge {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    border-radius: 15px;
+}
+
+.empty-state {
+    padding: 60px 20px;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--stable-gold);
+    box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+}
+
+textarea.form-control {
+    min-height: 200px;
+    resize: vertical;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.pagination .page-link {
+    border-radius: 20px !important;
+    margin: 0 2px;
+    border: none;
+    color: var(--stable-brown);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--stable-brown);
+    border-color: var(--stable-brown);
+}
+
+footer {
+    margin-top: auto;
+}
+
+/* Animation for icons */
+.fa-horse-head, .fa-horse {
+    animation: gentle-bounce 3s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .post-card {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--stable-brown);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #654321;
+}
+
+/* Loading animation for forms */
+.btn:disabled {
+    position: relative;
+    color: transparent;
+}
+
+.btn:disabled::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

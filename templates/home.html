@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h2 class="mb-4">
+            <i class="fas fa-scroll me-2"></i>Latest Tales from the Stable
+        </h2>
+        
+        {% if posts.items %}
+            {% for post in posts.items %}
+            <div class="card mb-4 post-card">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{{ url_for('post', id=post.id) }}" class="text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+                    <p class="card-text text-muted mb-2">
+                        <i class="fas fa-user me-1"></i>{{ post.author.username }}
+                        <i class="fas fa-calendar ms-3 me-1"></i>{{ post.date_posted.strftime('%B %d, %Y') }}
+                    </p>
+                    <p class="card-text">
+                        {{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}
+                    </p>
+                    <a href="{{ url_for('post', id=post.id) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-book-open me-1"></i>Read Full Tale
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if posts.pages > 1 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('home', page=posts.prev_num) }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page_num in posts.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != posts.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if posts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('home', page=posts.next_num) }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <div class="text-center">
+                <div class="empty-state">
+                    <i class="fas fa-horse fa-5x text-muted mb-3"></i>
+                    <h3 class="text-muted mb-3">The stable is quiet...</h3>
+                    <p class="text-muted mb-4">No tales have been shared yet. Be the first to tell your story!</p>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('write') }}" class="btn btn-primary">
+                            <i class="fas fa-feather-alt me-2"></i>Write Your First Tale
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-2"></i>Join the Stable
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-info-circle me-2"></i>About the Stable</h5>
+            </div>
+            <div class="card-body">
+                <p>Welcome to Punuhorse's Stable! This is a place where stories gallop free and memories are preserved like precious hay.</p>
+                <hr>
+                <h6><i class="fas fa-quill-alt me-2"></i>What you can do:</h6>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Share your daily tales</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Read others' stories</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Keep a personal diary</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Build a community of writers</li>
+                </ul>
+            </div>
+        </div>
+        
+        {% if current_user.is_authenticated %}
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h6><i class="fas fa-plus-circle me-2"></i>Quick Actions</h6>
+            </div>
+            <div class="card-body text-center">
+                <a href="{{ url_for('write') }}" class="btn btn-success btn-sm mb-2 w-100">
+                    <i class="fas fa-feather-alt me-2"></i>Write New Tale
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
